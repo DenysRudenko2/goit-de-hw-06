@@ -74,20 +74,10 @@ Spark збирає дані у вікнах по 30 секунд і генеру
 - **Код 104**: "It's too hot" - температура від 40 до 300°C
 - Значення -999 означає "не перевіряти"
 
-### 5. Структура проекту в PyCharm
-
-![Project Structure](screenshots/img_4.png)
-
-**Що бачимо:** Всі файли проекту hw-06:
-- `1_sensor_data_generator.py` - генератор даних датчиків
-- `2_spark_streaming_processor.py` - Spark Streaming обробка
-- `3_alert_consumer.py` - читач алертів з Kafka
-- `alerts_conditions.csv` - умови для генерації алертів
-- `configs.py` - налаштування підключення до Kafka
-
+![Kafka Alerts Output](screenshots/06_kafka_alerts_output.png)
 ### 6. Алерти успішно записані в Kafka топік
 
-![Kafka Alerts Output](screenshots/06_kafka_alerts_output.png)
+![Kafka Alerts Output](screenshots/img_4.png)
 
 **Що бачимо:** PyCharm Kafka Plugin підтверджує:
 - **Consumer Group**: `alert_monitor_group`
