@@ -49,7 +49,7 @@ Spark збирає дані у вікнах по 30 секунд і генеру
 
 ### 2. Spark Streaming обробляє дані у вікнах (window)
 
-![Spark Aggregation](screenshots/img.png)
+![Spark Aggregation](screenshots/img_3.png)
 
 **Що бачимо:** Spark агрегує дані у sliding windows та обчислює середні значення:
 - **window_start/window_end** - часові межі вікна (30 секунд)
@@ -58,8 +58,6 @@ Spark збирає дані у вікнах по 30 секунд і генеру
 
 ### 3. Генерація алертів на основі умов з CSV
 
-![Alert Generation](screenshots/img_1.png)
-
 **Що бачимо:** Дві таблиці:
 - **Верхня**: Агреговані дані (window, t_avg=39.95°C, h_avg=54.96%)
 - **Нижня**: Згенерований алерт з кодом 104 "It's too hot" коли температура > 38°C
@@ -67,7 +65,7 @@ Spark збирає дані у вікнах по 30 секунд і генеру
 
 ### 4. Умови алертів з файлу alerts_conditions.csv
 
-![Alert Conditions CSV](screenshots/img_3.png)
+![Alert Conditions CSV](screenshots/image.png)
 
 **Що бачимо:** CSV файл з правилами генерації алертів:
 - **Код 101**: "It's too dry" - вологість 0-40%
