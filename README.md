@@ -45,37 +45,57 @@ Spark збирає дані у вікнах по 30 секунд і генеру
 
 ![Multiple Generators](screenshots/03_multiple_generators.png)
 
-**Що бачимо:** Два термінали з різними Instance ID (952 і 972) генерують дані датчиків одночасно.
+**Що бачимо:** Два термінали з різними Instance ID (952 і 972) генерують дані датчиків одночасно. Кожен генератор створює дані для 5 датчиків з випадковими температурами та вологістю.
 
-### 2. Spark Streaming обробляє дані
+### 2. Spark Streaming обробляє дані у вікнах (window)
 
-![Spark Processing](screenshots/img.png)
+![Spark Aggregation](screenshots/img.png)
 
-**Що бачимо:** Spark агрегує дані у вікнах (window) та обчислює середні значення температури і вологості.
+**Що бачимо:** Spark агрегує дані у sliding windows та обчислює середні значення:
+- **window_start/window_end** - часові межі вікна (30 секунд)
+- **t_avg = 39.95°C** - середня температура у вікні
+- **h_avg = 54.96%** - середня вологість у вікні
 
-### 3. Генерація алертів
+### 3. Генерація алертів на основі умов з CSV
 
 ![Alert Generation](screenshots/img_1.png)
 
-**Що бачимо:** Коли середня температура > 38°C, генерується алерт "It's too hot" з кодом 104.
+**Що бачимо:** Дві таблиці:
+- **Верхня**: Агреговані дані (window, t_avg=39.95°C, h_avg=54.96%)
+- **Нижня**: Згенерований алерт з кодом 104 "It's too hot" коли температура > 38°C
+- Алерт містить всі поля: window, значення, код, повідомлення, timestamp
 
-### 4. Алерти в Kafka
+### 4. Умови алертів з файлу alerts_conditions.csv
 
-![Kafka Alerts](screenshots/06_kafka_alerts_output.png)
+![Alert Conditions CSV](screenshots/img_3.png)
 
-**Що бачимо:** Consumer група `alert_monitor_group` читає 53 алерти з топіку `denys_rudenko_alerts`.
+**Що бачимо:** CSV файл з правилами генерації алертів:
+- **Код 101**: "It's too dry" - вологість 0-40%
+- **Код 102**: "It's too wet" - вологість 60-100%
+- **Код 103**: "It's too cold" - температура від -300 до 30°C
+- **Код 104**: "It's too hot" - температура від 40 до 300°C
+- Значення -999 означає "не перевіряти"
 
-### 5. Детальний вигляд алертів
+### 5. Структура проекту в PyCharm
 
-![Alert Details](screenshots/img_3.png)
+![Project Structure](screenshots/img_4.png)
 
-**Що бачимо:** Форматовані алерти з усіма деталями - температура, вологість, час, повідомлення.
+**Що бачимо:** Всі файли проекту hw-06:
+- `1_sensor_data_generator.py` - генератор даних датчиків
+- `2_spark_streaming_processor.py` - Spark Streaming обробка
+- `3_alert_consumer.py` - читач алертів з Kafka
+- `alerts_conditions.csv` - умови для генерації алертів
+- `configs.py` - налаштування підключення до Kafka
 
-### 6. Підтвердження в Kafka Plugin
+### 6. Алерти успішно записані в Kafka топік
 
-![Kafka Plugin View](screenshots/img_4.png)
+![Kafka Alerts Output](screenshots/06_kafka_alerts_output.png)
 
-**Що бачимо:** PyCharm Kafka plugin показує що алерти успішно записані в топік.
+**Що бачимо:** PyCharm Kafka Plugin підтверджує:
+- **Consumer Group**: `alert_monitor_group`
+- **Topic**: `denys_rudenko_alerts` 
+- **Offset**: 53 - кількість алертів записаних в топік
+- Це доводить що відфільтровані дані були успішно записані в Kafka
 
 ---
 
